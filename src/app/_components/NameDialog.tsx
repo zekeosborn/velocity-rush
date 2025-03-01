@@ -45,6 +45,7 @@ export default function NameDialog({ open, onClose }: Props) {
     onSuccess: () => {
       updateSession();
       onClose();
+      form.setValue('name', '');
     },
     onError: () => {
       toast('Oops, something went wrong! Please try again later.');
