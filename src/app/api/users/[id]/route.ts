@@ -65,8 +65,12 @@ export async function PATCH(
     // Authorization
     const session = await getServerSession(authOptions);
 
-    if (!session || id !== session.user.id) {
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (id !== session.user.id) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Form data validation
