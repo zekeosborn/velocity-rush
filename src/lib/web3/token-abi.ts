@@ -1,4 +1,4 @@
-const velocityTokenAbi = [
+const tokenAbi = [
   {
     inputs: [
       {
@@ -463,4 +463,4 @@ const velocityTokenAbi = [
   },
 ] as const;
 
-export default velocityTokenAbi;
+export default tokenAbi;

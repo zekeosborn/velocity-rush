@@ -1,12 +1,12 @@
-import velocityTokenAbi from '@/contracts/velocityTokenAbi';
 import authOptions from '@/lib/auth-options';
+import tokenAbi from '@/lib/web3/token-abi';
 import { account, publicClient, walletClient } from '@/lib/web3/viem-config';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import { isAddress, type Address } from 'viem';
+import { isAddress, parseUnits, type Address } from 'viem';
 
 const tokenContractAddress = process.env.TOKEN_CONTRACT_ADDRESS as Address;
-const mintAmount = BigInt(10 * 10 ** 18); // 10 VELO
+const amount = parseUnits('1', 18);
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,9 +27,9 @@ export async function POST(req: NextRequest) {
     // Mint token
     const { request } = await publicClient.simulateContract({
       address: tokenContractAddress,
-      abi: velocityTokenAbi,
+      abi: tokenAbi,
       functionName: 'mint',
-      args: [recipient, mintAmount],
+      args: [recipient, amount],
       account,
     });
 

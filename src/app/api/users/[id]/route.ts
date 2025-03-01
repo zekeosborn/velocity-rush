@@ -1,6 +1,6 @@
-import velocityTokenAbi from '@/contracts/velocityTokenAbi';
 import authOptions from '@/lib/auth-options';
 import { userPatchSchema } from '@/lib/validation-schemas';
+import tokenAbi from '@/lib/web3/token-abi';
 import { publicClient } from '@/lib/web3/viem-config';
 import prisma from '@/prisma/client';
 import type { UserPatchDto } from '@/types/dtos';
@@ -31,17 +31,17 @@ export async function GET(
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Get VELO balance
-    const velo = await publicClient.readContract({
+    // Get RUSH balance
+    const rush = await publicClient.readContract({
       address: tokenContractAddress,
-      abi: velocityTokenAbi,
+      abi: tokenAbi,
       functionName: 'balanceOf',
       args: [user.walletAddress as Address],
     });
 
     const userData = {
       ...user,
-      velo: formatBalance(velo),
+      rush: formatBalance(rush),
     };
 
     return NextResponse.json(userData);
