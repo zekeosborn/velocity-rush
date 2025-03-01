@@ -6,7 +6,10 @@ import { signOut, useSession } from 'next-auth/react';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useDisconnect } from 'wagmi';
+import Maintenance from './_components/Maintenance';
 import NameDialog from './_components/NameDialog';
+
+const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE;
 
 export default function Home() {
   const godotRef = useRef<GodotIframe>(null);
@@ -44,6 +47,8 @@ export default function Home() {
       godotWindow.userName = session?.user.name;
     }
   }, [session]);
+
+  if (isMaintenance) return <Maintenance />;
 
   return (
     <>
