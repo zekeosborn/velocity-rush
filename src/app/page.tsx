@@ -9,7 +9,7 @@ import { useDisconnect } from 'wagmi';
 import Maintenance from './_components/Maintenance';
 import NameDialog from './_components/NameDialog';
 
-const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE;
+const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE === 'true';
 
 export default function Home() {
   const godotRef = useRef<GodotIframe>(null);
