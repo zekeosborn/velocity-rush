@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useDisconnect } from 'wagmi';
 import Maintenance from './_components/Maintenance';
-import NameDialog from './_components/NameDialog';
+import UsernameDialog from './_components/UsernameDialog';
 
 const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE === 'true';
 
@@ -16,7 +16,7 @@ export default function Home() {
   const { openConnectModal } = useConnectModal();
   const { data: session } = useSession();
   const { disconnect } = useDisconnect();
-  const [isNameDialogOpen, setIsNameDialogOpen] = useState(false);
+  const [isUsernameDialogOpen, setIsUsernameDialogOpen] = useState(false);
 
   const disconnectWallet = () => {
     disconnect();
@@ -32,7 +32,7 @@ export default function Home() {
       godotWindow.disconnectWallet = disconnectWallet;
       godotWindow.toggleFullscreen = toggleFullscreen;
       godotWindow.sendNotification = (message: string) => toast(message);
-      godotWindow.openNameDialog = () => setIsNameDialogOpen(true);
+      godotWindow.openUsernameDialog = () => setIsUsernameDialogOpen(true);
     }
   }, []);
 
@@ -44,7 +44,7 @@ export default function Home() {
       godotWindow.isWalletConnected = !!session;
       godotWindow.userId = session?.user.id;
       godotWindow.walletAddress = session?.user.walletAddress;
-      godotWindow.userName = session?.user.name;
+      godotWindow.username = session?.user.username;
     }
   }, [session]);
 
@@ -59,9 +59,9 @@ export default function Home() {
         className="h-screen w-full"
       />
 
-      <NameDialog
-        open={isNameDialogOpen}
-        onClose={() => setIsNameDialogOpen(false)}
+      <UsernameDialog
+        open={isUsernameDialogOpen}
+        onClose={() => setIsUsernameDialogOpen(false)}
       />
     </>
   );

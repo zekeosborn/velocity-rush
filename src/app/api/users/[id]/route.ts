@@ -80,18 +80,28 @@ export async function PATCH(
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
-    const { name, longestRun } = body;
+    const { username, longestRun } = body;
 
     // User validation
-    const user = await prisma.user.findUnique({ where: { id } });
+    const users = await prisma.user.findMany();
+    const userIndex = users.findIndex((user) => user.id === id);
+    const user = userIndex !== -1 ? users.splice(userIndex, 1)[0] : undefined;
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    if (users.some((user) => user.username === username)) {
+      return NextResponse.json(
+        { error: 'Username is already taken' },
+        { status: 409 },
+      );
+    }
+
+    // Update user
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
-      data: { name, longestRun },
+      data: { username, longestRun },
     });
 
     return NextResponse.json(updatedUser);

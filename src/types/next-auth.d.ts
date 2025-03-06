@@ -6,7 +6,7 @@ declare module 'next-auth' {
     user: {
       id: string;
       walletAddress: Address;
-      name: string | null;
+      username: string | null;
     };
     expires: ISODateString;
   }

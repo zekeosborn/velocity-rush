@@ -1,15 +1,21 @@
 import { z } from 'zod';
 
+const usernameSchema = z
+  .string()
+  .trim()
+  .nonempty('Please enter a username.')
+  .min(3, 'Must be at least 3 characters long.')
+  .regex(
+    /^[a-zA-Z0-9_]*$/,
+    'Only letters, numbers, and underscores are allowed.',
+  )
+  .max(21, 'Must be no more than 21 characters long.');
+
 export const userPatchSchema = z.object({
-  name: z.string().trim().min(3).max(21).optional(),
+  username: usernameSchema.optional(),
   longestRun: z.number().optional(),
 });
 
-export const nameFormSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .nonempty('Please enter your name.')
-    .min(3, 'Must be at least 3 characters long.')
-    .max(21, 'Must be no more than 21 characters long.'),
+export const usernameFormSchema = z.object({
+  username: usernameSchema,
 });

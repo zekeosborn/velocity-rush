@@ -69,7 +69,7 @@ const authOptions: AuthOptions = {
       session.user = {
         id: user.id,
         walletAddress: user.walletAddress as Address,
-        name: user.name,
+        username: user.username,
       };
 
       return session;
