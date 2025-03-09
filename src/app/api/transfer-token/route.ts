@@ -24,11 +24,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json('Invalid recipient address', { status: 400 });
     }
 
-    // Mint token
+    // Transfer token
     const { request } = await publicClient.simulateContract({
       address: tokenContractAddress,
       abi: tokenAbi,
-      functionName: 'mint',
+      functionName: 'transfer',
       args: [recipient, amount],
       account,
     });
@@ -38,6 +38,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ hash });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Failed to mint' }, { status: 500 });
+
+    return NextResponse.json(
+      { error: 'Failed to transfer token' },
+      { status: 500 },
+    );
   }
 }

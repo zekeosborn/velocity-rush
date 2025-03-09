@@ -3,12 +3,33 @@ const tokenAbi = [
     inputs: [
       {
         internalType: 'uint256',
+        name: 'cap',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
         name: 'initialSupply',
         type: 'uint256',
       },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'increasedSupply',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'cap',
+        type: 'uint256',
+      },
+    ],
+    name: 'ERC20ExceededCap',
+    type: 'error',
   },
   {
     inputs: [
@@ -61,6 +82,17 @@ const tokenAbi = [
       },
     ],
     name: 'ERC20InvalidApprover',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'cap',
+        type: 'uint256',
+      },
+    ],
+    name: 'ERC20InvalidCap',
     type: 'error',
   },
   {
@@ -172,44 +204,6 @@ const tokenAbi = [
         type: 'address',
       },
       {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-    ],
-    name: 'TokenBurned',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-    ],
-    name: 'TokenMinted',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'from',
-        type: 'address',
-      },
-      {
         indexed: true,
         internalType: 'address',
         name: 'to',
@@ -296,13 +290,44 @@ const tokenAbi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: 'amount',
+        name: 'value',
         type: 'uint256',
       },
     ],
     name: 'burn',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'value',
+        type: 'uint256',
+      },
+    ],
+    name: 'burnFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'cap',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
