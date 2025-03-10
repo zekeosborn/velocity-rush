@@ -1,5 +1,6 @@
 import { Toaster } from '@/components/ui/sonner';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { headers } from 'next/headers';
@@ -22,6 +23,7 @@ export default async function RootLayout({
           <main>{children}</main>
           <Toaster />
           <Analytics />
+          <SpeedInsights />
         </Providers>
       </body>
     </html>
