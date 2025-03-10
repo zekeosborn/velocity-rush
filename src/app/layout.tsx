@@ -1,4 +1,5 @@
 import { Toaster } from '@/components/ui/sonner';
+import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { headers } from 'next/headers';
@@ -20,6 +21,7 @@ export default async function RootLayout({
         <Providers cookies={cookies}>
           <main>{children}</main>
           <Toaster />
+          <Analytics />
         </Providers>
       </body>
     </html>
