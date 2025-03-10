@@ -9,7 +9,7 @@ const usernameSchema = z
     /^[a-zA-Z0-9_]*$/,
     'Only letters, numbers, and underscores are allowed.',
   )
-  .max(21, 'Must be no more than 21 characters long.');
+  .max(15, 'Must be no more than 15 characters long.');
 
 export const userPatchSchema = z.object({
   username: usernameSchema.optional(),
