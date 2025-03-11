@@ -10,9 +10,9 @@ export default function Maintenance() {
       <a
         href="https://x.com/zekeosborn"
         target="_blank"
-        className="absolute bottom-6 right-6 rounded-full bg-black p-2"
+        className="absolute bottom-6 right-6 rounded-full bg-black p-2 2xl:bottom-8 2xl:right-8"
       >
-        <SiX className="size-7 text-white" />
+        <SiX className="size-7 text-white 2xl:size-9" />
       </a>
     </div>
   );
