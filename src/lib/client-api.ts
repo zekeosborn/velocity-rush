@@ -1,21 +1,21 @@
 import type { UserDto, UserPatchDto } from '@/types/dtos';
 import axios from 'axios';
 
-interface UpdateUserParams {
+interface CreateUsernameParams {
   id: string;
   data: UserPatchDto;
 }
 
-const userApi = axios.create({
-  baseURL: '/api/users',
+const createUsernameApi = axios.create({
+  baseURL: '/api/create-username',
 });
 
-export async function updateUser({ id, data }: UpdateUserParams) {
+export async function createUsername({ id, data }: CreateUsernameParams) {
   try {
-    const response = await userApi.patch<UserDto>(`/${id}`, data);
+    const response = await createUsernameApi.patch<UserDto>(`/${id}`, data);
     return response.data;
   } catch (error) {
-    logError(error, 'updateUser');
+    logError(error, 'createUsername');
     throw error;
   }
 }
