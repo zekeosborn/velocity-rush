@@ -16,6 +16,7 @@ export async function GET() {
     const users = await prisma.user.findMany({
       where: { banned: false, longestRun: { gt: 0 } },
       orderBy: { longestRun: 'desc' },
+      take: 100,
     });
 
     // Restructure user data
