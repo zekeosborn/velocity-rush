@@ -14,7 +14,7 @@ export async function GET() {
 
     // Get user data
     const users = await prisma.user.findMany({
-      where: { longestRun: { gt: 0 } },
+      where: { banned: false, longestRun: { gt: 0 } },
       orderBy: { longestRun: 'desc' },
     });
 
