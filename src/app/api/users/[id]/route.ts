@@ -1,5 +1,6 @@
 import authOptions from '@/lib/auth-options';
 import { userPatchSchema } from '@/lib/validation-schemas';
+import { generateHmac } from '@/lib/web3/hmac';
 import tokenAbi from '@/lib/web3/token-abi';
 import { publicClient } from '@/lib/web3/viem-config';
 import prisma from '@/prisma/client';
@@ -9,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { formatUnits, type Address } from 'viem';
 
 const tokenContractAddress = process.env.TOKEN_CONTRACT_ADDRESS as Address;
+const maxTimeDiff = 30; // 30 seconds
 
 export async function GET(
   request: NextRequest,
@@ -60,6 +62,7 @@ export async function PATCH(
   requestContext: RequestContext,
 ) {
   try {
+    const body: UserPatchDto = await request.json();
     const { id } = await requestContext.params;
 
     // Authorization
@@ -73,8 +76,24 @@ export async function PATCH(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
+    // HMAC Authentication
+    const timestamp = parseInt(request.headers.get('timestamp') ?? '0', 10);
+    const dateNow = Date.now() / 1000;
+
+    const receivedSignature = request.headers.get('signature');
+    const expectedSignature = generateHmac(
+      JSON.stringify(body),
+      timestamp.toString(),
+    );
+
+    const isInvalidTimestamp = Math.abs(dateNow - timestamp) > maxTimeDiff;
+    const isInvalidSignature = receivedSignature !== expectedSignature;
+
+    if (isInvalidTimestamp || isInvalidSignature) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     // Form data validation
-    const body: UserPatchDto = await request.json();
     const validation = userPatchSchema.safeParse(body);
 
     if (!validation.success)

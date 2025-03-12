@@ -1,19 +1,19 @@
 import authOptions from '@/lib/auth-options';
+import { generateHmac } from '@/lib/web3/hmac';
 import tokenAbi from '@/lib/web3/token-abi';
 import { account, publicClient, walletClient } from '@/lib/web3/viem-config';
-import crypto from 'crypto';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { isAddress, parseUnits, type Address } from 'viem';
 
-const hmacSecret = process.env.HMAC_SECRET!;
 const tokenContractAddress = process.env.TOKEN_CONTRACT_ADDRESS as Address;
 const amount = parseUnits('1', 18);
 const maxTimeDiff = 30; // 30 seconds
 
 export async function POST(req: NextRequest) {
   try {
-    const { recipient } = await req.json();
+    const body = await req.json();
+    const { recipient } = body;
 
     // Authorization
     const session = await getServerSession(authOptions);
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
     const receivedSignature = req.headers.get('signature');
     const expectedSignature = generateHmac(
-      JSON.stringify({ recipient }),
+      JSON.stringify(body),
       timestamp.toString(),
     );
 
@@ -64,11 +64,4 @@ export async function POST(req: NextRequest) {
       { status: 500 },
     );
   }
-}
-
-function generateHmac(data: string, timestamp: string) {
-  const hmac = crypto.createHmac('sha256', hmacSecret);
-  hmac.update(data);
-  hmac.update(timestamp);
-  return hmac.digest('hex');
 }
