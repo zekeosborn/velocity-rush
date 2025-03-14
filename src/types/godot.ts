@@ -5,6 +5,7 @@ export type GodotWindow = Window & {
   userId?: string;
   walletAddress?: Address;
   username?: string | null;
+  baseApiUrl?: string;
   connectWallet?: () => void;
   disconnectWallet?: () => void;
   toggleFullscreen?: () => void;

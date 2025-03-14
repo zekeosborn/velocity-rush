@@ -8,6 +8,8 @@ import { toast } from 'sonner';
 import { useDisconnect } from 'wagmi';
 import UsernameDialog from './_components/UsernameDialog';
 
+const baseApiUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+
 export default function Home() {
   const godotRef = useRef<GodotIframe>(null);
   const { openConnectModal } = useConnectModal();
@@ -20,18 +22,19 @@ export default function Home() {
     signOut({ redirect: false });
   };
 
-  // Expose functions to the game
-  useEffect(() => {
+  // Expose necessary functions and variables to the game
+  const initializeGodotWindow = () => {
     const godotWindow = godotRef.current?.contentWindow;
 
     if (godotWindow) {
+      godotWindow.baseApiUrl = baseApiUrl;
       godotWindow.connectWallet = () => openConnectModal?.();
       godotWindow.disconnectWallet = disconnectWallet;
       godotWindow.toggleFullscreen = toggleFullscreen;
       godotWindow.sendNotification = (message: string) => toast(message);
       godotWindow.openUsernameDialog = () => setIsUsernameDialogOpen(true);
     }
-  }, []);
+  };
 
   // Sync wallet state with the game
   useEffect(() => {
@@ -49,6 +52,7 @@ export default function Home() {
     <>
       <iframe
         ref={godotRef}
+        onLoad={initializeGodotWindow}
         title="Velocity Rush"
         src="/velocity-rush/index.html"
         className="h-screen w-full"
