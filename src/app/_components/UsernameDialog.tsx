@@ -42,8 +42,11 @@ export default function UsernameDialog({ open, onClose }: Props) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: createUsername,
-    onSuccess: () => {
-      updateSession();
+    onSuccess: (user) => {
+      updateSession({
+        username: user.username,
+      });
+
       onClose();
       form.setValue('username', '');
     },

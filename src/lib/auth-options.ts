@@ -1,14 +1,14 @@
 import prisma from '@/prisma/client';
+import type { UserDto } from '@/types/dtos';
 import type { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getCsrfToken } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
-import type { Address } from 'viem';
 
 const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
-      name: 'Ethereum',
+      name: 'Monad',
       credentials: {
         message: {
           label: 'Message',
@@ -45,32 +45,43 @@ const authOptions: AuthOptions = {
           if (siwe.nonce !== csrfToken) return null;
 
           await siwe.verify({ signature: credentials.signature });
-          return { id: siwe.address };
-        } catch {
+
+          const user = await getCreateUser(siwe.address);
+
+          return {
+            id: user.id,
+            walletAddress: user.walletAddress,
+            username: user.username,
+          };
+        } catch (error) {
+          console.error(error);
           return null;
         }
       },
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
-      try {
-        await getCreateUser(user.id);
-        return true;
-      } catch {
-        return false;
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.id = user.id;
+        token.walletAddress = user.walletAddress;
+        token.username = user.username;
       }
+
+      if (trigger === 'update' && session?.username) {
+        token.username = session.username;
+      }
+
+      return token;
     },
     async session({ session, token }) {
-      if (!token.sub) throw new Error('Token does not have a subject.');
-
-      const user = await getCreateUser(token.sub);
-
-      session.user = {
-        id: user.id,
-        walletAddress: user.walletAddress as Address,
-        username: user.username,
-      };
+      if (token.id) {
+        session.user = {
+          id: token.id,
+          walletAddress: token.walletAddress,
+          username: token.username,
+        };
+      }
 
       return session;
     },
@@ -78,17 +89,11 @@ const authOptions: AuthOptions = {
 };
 
 async function getCreateUser(walletAddress: string) {
-  let user = await prisma.user.findUnique({
+  return prisma.user.upsert({
     where: { walletAddress },
-  });
-
-  if (!user) {
-    user = await prisma.user.create({
-      data: { walletAddress },
-    });
-  }
-
-  return user;
+    update: {},
+    create: { walletAddress },
+  }) as Promise<UserDto>;
 }
 
 export default authOptions;
