@@ -1,6 +1,5 @@
 import authOptions from '@/lib/auth-options';
 import { userPatchSchema } from '@/lib/validation-schemas';
-import { generateHmac } from '@/lib/web3/hmac';
 import tokenAbi from '@/lib/web3/token-abi';
 import { publicClient } from '@/lib/web3/viem-config';
 import prisma from '@/prisma/client';
@@ -9,8 +8,7 @@ import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { formatUnits, type Address } from 'viem';
 
-const tokenContractAddress = process.env.TOKEN_CONTRACT_ADDRESS as Address;
-const maxTimeDiff = 30; // 30 seconds
+const tokenCA = process.env.TOKEN_CA as Address;
 
 export async function GET(
   request: NextRequest,
@@ -26,7 +24,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // User validation
+    // Check if user exist
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
@@ -35,7 +33,7 @@ export async function GET(
 
     // Get RUSH balance
     const rush = await publicClient.readContract({
-      address: tokenContractAddress,
+      address: tokenCA,
       abi: tokenAbi,
       functionName: 'balanceOf',
       args: [user.walletAddress as Address],
@@ -62,55 +60,37 @@ export async function PATCH(
   requestContext: RequestContext,
 ) {
   try {
-    const body: UserPatchDto = await request.json();
     const { id } = await requestContext.params;
 
     // Authorization
     const session = await getServerSession(authOptions);
 
-    if (!session) {
+    if (!session || id !== session.user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (id !== session.user.id) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-
-    // HMAC Authentication
-    const timestamp = parseInt(request.headers.get('timestamp') ?? '0', 10);
-    const dateNow = Date.now() / 1000;
-
-    const receivedSignature = request.headers.get('signature');
-    const expectedSignature = generateHmac(
-      JSON.stringify(body),
-      timestamp.toString(),
-    );
-
-    const isInvalidTimestamp = Math.abs(dateNow - timestamp) > maxTimeDiff;
-    const isInvalidSignature = receivedSignature !== expectedSignature;
-
-    if (isInvalidTimestamp || isInvalidSignature) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-
     // Form data validation
+    const body: UserPatchDto = await request.json();
     const validation = userPatchSchema.safeParse(body);
 
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
-    const { username, longestRun } = body;
+    const { username } = body;
 
-    // User validation
-    const users = await prisma.user.findMany();
-    const userIndex = users.findIndex((user) => user.id === id);
-    const user = userIndex !== -1 ? users.splice(userIndex, 1)[0] : undefined;
+    // Check if user exist
+    const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    if (users.some((user) => user.username === username)) {
+    // Check if username is taken
+    const isUsernameTaken = await prisma.user.count({
+      where: { username: username ?? '', NOT: { id } },
+    });
+
+    if (isUsernameTaken) {
       return NextResponse.json(
         { error: 'Username is already taken' },
         { status: 409 },
@@ -120,7 +100,7 @@ export async function PATCH(
     // Update user
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
-      data: { username, longestRun },
+      data: { username },
     });
 
     return NextResponse.json(updatedUser);

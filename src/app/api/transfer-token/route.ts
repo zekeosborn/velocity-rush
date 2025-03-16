@@ -1,20 +1,16 @@
 import authOptions from '@/lib/auth-options';
-import { generateHmac } from '@/lib/web3/hmac';
+import { verifyHmac } from '@/lib/web3/hmac';
 import tokenAbi from '@/lib/web3/token-abi';
 import { account, publicClient, walletClient } from '@/lib/web3/viem-config';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { isAddress, parseUnits, type Address } from 'viem';
 
-const tokenContractAddress = process.env.TOKEN_CONTRACT_ADDRESS as Address;
-const amount = parseUnits('1', 18);
-const maxTimeDiff = 30; // 30 seconds
+const tokenCA = process.env.TOKEN_CA as Address;
+const transferAmount = parseUnits('1', 18);
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const body = await req.json();
-    const { recipient } = body;
-
     // Authorization
     const session = await getServerSession(authOptions);
 
@@ -22,38 +18,34 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // HMAC Authentication
-    const timestamp = parseInt(req.headers.get('timestamp') ?? '0', 10);
-    const dateNow = Date.now() / 1000;
+    // HMAC authentication
+    const body = await request.json();
+    const timestamp = parseInt(request.headers.get('timestamp') ?? '0', 10);
+    const signature = request.headers.get('signature') ?? '';
 
-    const receivedSignature = req.headers.get('signature');
-    const expectedSignature = generateHmac(
-      JSON.stringify(body),
-      timestamp.toString(),
-    );
+    const isHmacValid = verifyHmac(JSON.stringify(body), timestamp, signature);
 
-    const isInvalidTimestamp = Math.abs(dateNow - timestamp) > maxTimeDiff;
-    const isInvalidSignature = receivedSignature !== expectedSignature;
-
-    if (isInvalidTimestamp || isInvalidSignature) {
+    if (!isHmacValid) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Recipient validation
+    const { recipient } = body;
+
     if (!isAddress(recipient)) {
       return NextResponse.json('Invalid recipient address', { status: 400 });
     }
 
     // Transfer token
-    const { request } = await publicClient.simulateContract({
-      address: tokenContractAddress,
+    const { request: transferRequest } = await publicClient.simulateContract({
+      address: tokenCA,
       abi: tokenAbi,
       functionName: 'transfer',
-      args: [recipient, amount],
+      args: [recipient, transferAmount],
       account,
     });
 
-    const hash = await walletClient.writeContract(request);
+    const hash = await walletClient.writeContract(transferRequest);
 
     return NextResponse.json({ hash });
   } catch (error) {

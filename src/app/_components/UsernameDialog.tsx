@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { createUsername } from '@/lib/client-api';
+import { updateUser } from '@/lib/client-api';
 import { usernameFormSchema } from '@/lib/validation-schemas';
 import type { UsernameFormDto } from '@/types/dtos';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -41,7 +41,7 @@ export default function UsernameDialog({ isOpen, onClose }: Props) {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: createUsername,
+    mutationFn: updateUser,
     onSuccess: (user) => {
       updateSession({ username: user.username });
       onClose();

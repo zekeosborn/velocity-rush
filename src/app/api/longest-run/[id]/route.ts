@@ -1,5 +1,6 @@
 import authOptions from '@/lib/auth-options';
 import { userPatchSchema } from '@/lib/validation-schemas';
+import { verifyHmac } from '@/lib/web3/hmac';
 import prisma from '@/prisma/client';
 import type { UserPatchDto } from '@/types/dtos';
 import { getServerSession } from 'next-auth';
@@ -15,43 +16,41 @@ export async function PATCH(
     // Authorization
     const session = await getServerSession(authOptions);
 
-    if (!session) {
+    if (!session || id !== session.user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (id !== session.user.id) {
+    // HMAC authentication
+    const body: UserPatchDto = await request.json();
+    const timestamp = parseInt(request.headers.get('timestamp') ?? '0', 10);
+    const signature = request.headers.get('signature') ?? '';
+
+    const isHmacValid = verifyHmac(JSON.stringify(body), timestamp, signature);
+
+    if (!isHmacValid) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Form data validation
-    const body: UserPatchDto = await request.json();
     const validation = userPatchSchema.safeParse(body);
 
-    if (!validation.success)
+    if (!validation.success) {
       return NextResponse.json(validation.error.format(), { status: 400 });
+    }
 
-    const { username } = body;
+    const { longestRun } = body;
 
-    // User validation
-    const users = await prisma.user.findMany();
-    const userIndex = users.findIndex((user) => user.id === id);
-    const user = userIndex !== -1 ? users.splice(userIndex, 1)[0] : undefined;
+    // Check if user exist
+    const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    if (users.some((user) => user.username === username)) {
-      return NextResponse.json(
-        { error: 'Username is already taken' },
-        { status: 409 },
-      );
-    }
-
     // Update user
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
-      data: { username },
+      data: { longestRun },
     });
 
     return NextResponse.json(updatedUser);
@@ -59,7 +58,7 @@ export async function PATCH(
     console.error(error);
 
     return NextResponse.json(
-      { error: 'Failed to create username' },
+      { error: 'Failed to update longest run' },
       { status: 500 },
     );
   }
