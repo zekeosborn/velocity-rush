@@ -25,11 +25,11 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 interface Props {
-  open: boolean;
+  isOpen: boolean;
   onClose: () => void;
 }
 
-export default function UsernameDialog({ open, onClose }: Props) {
+export default function UsernameDialog({ isOpen, onClose }: Props) {
   const { data: session, update: updateSession } = useSession();
 
   const form = useForm<UsernameFormDto>({
@@ -43,29 +43,26 @@ export default function UsernameDialog({ open, onClose }: Props) {
   const { mutate, isPending } = useMutation({
     mutationFn: createUsername,
     onSuccess: (user) => {
-      updateSession({
-        username: user.username,
-      });
-
+      updateSession({ username: user.username });
       onClose();
-      form.setValue('username', '');
+      form.reset();
     },
     onError: (error: AxiosError) => {
-      if (error.status === 409) {
+      if (error.response?.status === 409) {
         form.setError('username', { message: 'Username is already taken.' });
-        return;
+      } else {
+        toast('Oops, something went wrong! Please try again later.');
       }
-
-      toast('Oops, something went wrong! Please try again later.');
     },
   });
 
   function saveChanges(values: UsernameFormDto) {
-    mutate({ id: session!.user.id, data: values });
+    if (!session?.user.id) return;
+    mutate({ id: session.user.id, data: values });
   }
 
   return (
-    <Dialog open={open}>
+    <Dialog open={isOpen}>
       <DialogContent className="max-w-md [&>button]:hidden">
         <DialogHeader className="mb-2">
           <DialogTitle>Create a username</DialogTitle>
@@ -79,7 +76,11 @@ export default function UsernameDialog({ open, onClose }: Props) {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input {...field} placeholder="johndoe" />
+                    <Input
+                      {...field}
+                      placeholder="johndoe"
+                      autoComplete="off"
+                    />
                   </FormControl>
 
                   <FormMessage className="absolute" />

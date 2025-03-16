@@ -67,7 +67,7 @@ export default function Home() {
       />
 
       <UsernameDialog
-        open={isUsernameDialogOpen}
+        isOpen={isUsernameDialogOpen}
         onClose={() => setIsUsernameDialogOpen(false)}
       />
     </>
