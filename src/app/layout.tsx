@@ -1,6 +1,4 @@
 import { Toaster } from '@/components/ui/sonner';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { headers } from 'next/headers';
@@ -38,8 +36,6 @@ async function MainContent({ children }: React.PropsWithChildren) {
     <Providers cookies={cookies}>
       <main>{children}</main>
       <Toaster />
-      <Analytics />
-      <SpeedInsights />
     </Providers>
   );
 }
