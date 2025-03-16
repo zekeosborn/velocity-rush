@@ -3,7 +3,7 @@
 import type { GodotIframe } from '@/types/godot';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { signOut, useSession } from 'next-auth/react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useDisconnect } from 'wagmi';
 import UsernameDialog from './_components/UsernameDialog';
@@ -12,18 +12,26 @@ const baseApiUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export default function Home() {
   const godotRef = useRef<GodotIframe>(null);
-  const { openConnectModal } = useConnectModal();
   const { data: session } = useSession();
+  const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
   const [isUsernameDialogOpen, setIsUsernameDialogOpen] = useState(false);
 
-  const disconnectWallet = () => {
+  const disconnectWallet = useCallback(() => {
     disconnect();
     signOut({ redirect: false });
-  };
+  }, [disconnect]);
+
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  }, []);
 
   // Expose necessary functions and variables to the game
-  const initializeGodotWindow = () => {
+  useEffect(() => {
     const godotWindow = godotRef.current?.contentWindow;
 
     if (godotWindow) {
@@ -34,9 +42,9 @@ export default function Home() {
       godotWindow.sendNotification = (message: string) => toast(message);
       godotWindow.openUsernameDialog = () => setIsUsernameDialogOpen(true);
     }
-  };
+  }, [disconnectWallet, openConnectModal, toggleFullscreen]);
 
-  // Sync wallet state with the game
+  // Sync wallet/session state with the game
   useEffect(() => {
     const godotWindow = godotRef.current?.contentWindow;
 
@@ -52,10 +60,10 @@ export default function Home() {
     <>
       <iframe
         ref={godotRef}
-        onLoad={initializeGodotWindow}
         title="Velocity Rush"
         src="/velocity-rush/index.html"
         className="h-screen w-full"
+        sandbox="allow-scripts allow-same-origin allow-popups"
       />
 
       <UsernameDialog
@@ -64,12 +72,4 @@ export default function Home() {
       />
     </>
   );
-}
-
-function toggleFullscreen() {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
 }
