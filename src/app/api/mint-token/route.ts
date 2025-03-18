@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isAddress, parseUnits, type Address } from 'viem';
 
 const tokenCA = process.env.TOKEN_CA as Address;
-const transferAmount = parseUnits('1', 18);
+const mintAmount = parseUnits('1', 18);
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,23 +36,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json('Invalid recipient address', { status: 400 });
     }
 
-    // Transfer token
-    const { request: transferRequest } = await publicClient.simulateContract({
+    // Mint token
+    const { request: mintRequest } = await publicClient.simulateContract({
       address: tokenCA,
       abi: tokenAbi,
-      functionName: 'transfer',
-      args: [recipient, transferAmount],
+      functionName: 'mint',
+      args: [recipient, mintAmount],
       account,
     });
 
-    const hash = await walletClient.writeContract(transferRequest);
+    const hash = await walletClient.writeContract(mintRequest);
 
     return NextResponse.json({ hash });
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
-      { error: 'Failed to transfer token' },
+      { error: 'Failed to mint token' },
       { status: 500 },
     );
   }
