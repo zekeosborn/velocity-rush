@@ -6,10 +6,10 @@ const usernameSchema = z
   .nonempty('Please enter a username.')
   .min(3, 'Must be at least 3 characters long.')
   .regex(
-    /^[a-zA-Z0-9_]*$/,
-    'Only letters, numbers, and underscores are allowed.',
+    /^[a-zA-Z0-9._]*$/,
+    'Only letters, numbers, dots, and underscores are allowed.',
   )
-  .max(15, 'Must be no more than 15 characters long.');
+  .max(11, 'Must be no more than 11 characters long.');
 
 export const userPatchSchema = z.object({
   username: usernameSchema.optional(),

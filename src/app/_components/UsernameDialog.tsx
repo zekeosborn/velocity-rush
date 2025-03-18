@@ -90,11 +90,11 @@ export default function UsernameDialog({ isOpen, onClose }: Props) {
 
             <Button className="ml-auto flex" disabled={isPending}>
               {!isPending ? (
-                'Save'
+                'Create'
               ) : (
                 <>
                   <Loader2 className="animate-spin" />
-                  Saving
+                  Creating
                 </>
               )}
             </Button>
