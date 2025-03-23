@@ -1,16 +1,18 @@
-// @ts-check
-
-import { fixupConfigRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import tseslint from 'typescript-eslint';
+import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const flatCompat = new FlatCompat();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const config = tseslint.config(
-  fixupConfigRules(flatCompat.extends('next/core-web-vitals')),
-  fixupConfigRules(flatCompat.extends('next/typescript')),
-  eslintPluginPrettierRecommended,
-);
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
 
-export default config;
+const eslintConfig = [
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  eslintPluginPrettier,
+];
+
+export default eslintConfig;
