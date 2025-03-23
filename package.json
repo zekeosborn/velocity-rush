@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "prepare": "husky",
+    "commit": "cz",
     "next:dev": "npm run -w packages/nextjs prisma:dev && npm run -w packages/nextjs dev",
     "next:build": "npm run -w packages/nextjs prisma:deploy && npm run -w packages/nextjs build",
     "next:start": "npm run -w packages/nextjs start",
@@ -12,10 +13,16 @@
     "next:lint:fix": "npm run -w packages/nextjs lint:fix"
   },
   "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0"
   },
   "lint-staged": {
     "packages/nextjs/**/*.{js,ts,jsx,tsx}": "npx -w packages/nextjs eslint -f table --fix"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
