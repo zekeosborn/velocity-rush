@@ -4,10 +4,18 @@
   "workspaces": ["packages/*"],
   "private": true,
   "scripts": {
+    "prepare": "husky",
     "next:dev": "npm run -w packages/nextjs prisma:dev && npm run -w packages/nextjs dev",
     "next:build": "npm run -w packages/nextjs prisma:deploy && npm run -w packages/nextjs build",
     "next:start": "npm run -w packages/nextjs start",
     "next:lint": "npm run -w packages/nextjs lint",
     "next:lint:fix": "npm run -w packages/nextjs lint:fix"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0"
+  },
+  "lint-staged": {
+    "packages/nextjs/**/*.{js,ts,jsx,tsx}": "npx -w packages/nextjs eslint -f table --fix"
   }
 }
