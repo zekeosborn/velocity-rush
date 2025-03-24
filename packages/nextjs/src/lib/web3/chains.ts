@@ -1,9 +1,9 @@
-import { Chain } from 'viem';
+import { defineChain } from 'viem';
 
-const monadRpc = process.env.NEXT_PUBLIC_MONAD_RPC!;
+const monadRpcUrl = process.env.NEXT_PUBLIC_MONAD_RPC_URL!;
 
-export const monad = {
-  id: 10143,
+export const monad = defineChain({
+  id: 10_143,
   name: 'Monad',
   nativeCurrency: {
     name: 'MON',
@@ -11,8 +11,6 @@ export const monad = {
     decimals: 18,
   },
   rpcUrls: {
-    default: {
-      http: [monadRpc],
-    },
+    default: { http: [monadRpcUrl] },
   },
-} satisfies Chain;
+});

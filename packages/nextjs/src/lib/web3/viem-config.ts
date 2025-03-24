@@ -5,17 +5,19 @@ import {
   http,
 } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+import { hardhat } from 'viem/chains';
 import { monad } from './chains';
 
 const privateKey = process.env.PRIVATE_KEY as Address;
+const monadRpcUrl = process.env.NEXT_PUBLIC_MONAD_RPC_URL!;
 
 export const publicClient = createPublicClient({
-  chain: monad,
+  chain: monadRpcUrl ? monad : hardhat,
   transport: http(),
 });
 
 export const walletClient = createWalletClient({
-  chain: monad,
+  chain: monadRpcUrl ? monad : hardhat,
   transport: http(),
 });
 

@@ -1,17 +1,14 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { http } from 'viem';
+import { hardhat } from 'viem/chains';
 import { monad } from './chains';
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID!;
-const monadRpc = process.env.NEXT_PUBLIC_MONAD_RPC!;
+const monadRpcUrl = process.env.NEXT_PUBLIC_MONAD_RPC_URL!;
 
 const wagmiConfig = getDefaultConfig({
   appName: 'Velocity Rush',
   projectId,
-  chains: [monad],
-  transports: {
-    [monad.id]: http(monadRpc),
-  },
+  chains: [monadRpcUrl ? monad : hardhat],
   ssr: true,
 });
 
