@@ -1,0 +1,24 @@
+{
+  "name": "hardhat",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "chain": "hardhat node",
+    "compile": "hardhat compile",
+    "deploy": "hardhat ignition deploy ./ignition/modules/DeploymentModule.ts --network localhost",
+    "clean": "hardhat clean",
+    "lint": "solhint -f table \"contracts/**/*.sol\"",
+    "lint:fix": "solhint -f table \"contracts/**/*.sol\" --fix"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.2.0",
+    "viem": "^2.23.14"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
+    "dotenv": "^16.4.7",
+    "hardhat": "^2.22.19",
+    "solhint": "^5.0.5",
+    "typescript": "^5.8.2"
+  }
+}

@@ -10,7 +10,13 @@
     "next:build": "npm run -w packages/nextjs prisma:deploy && npm run -w packages/nextjs build",
     "next:start": "npm run -w packages/nextjs start",
     "next:lint": "npm run -w packages/nextjs lint",
-    "next:lint:fix": "npm run -w packages/nextjs lint:fix"
+    "next:lint:fix": "npm run -w packages/nextjs lint:fix",
+    "hardhat:chain": "npm run -w packages/hardhat chain",
+    "hardhat:compile": "npm run -w packages/hardhat compile",
+    "hardhat:deploy": "npm run -w packages/hardhat deploy",
+    "hardhat:clean": "npm run -w packages/hardhat clean",
+    "hardhat:lint": "npm run -w packages/hardhat lint",
+    "hardhat:lint:fix": "npm run -w packages/hardhat lint:fix"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0",
