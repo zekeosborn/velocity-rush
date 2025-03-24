@@ -1,0 +1,3 @@
+{
+  "packages/nextjs/**/*.{js,ts,jsx,tsx}": "npx -w packages/nextjs eslint -f table --fix"
+}
