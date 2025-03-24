@@ -8,7 +8,7 @@ import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { formatUnits, type Address } from 'viem';
 
-const tokenCA = process.env.TOKEN_CA as Address;
+const tokenAddress = process.env.TOKEN_ADDRESS as Address;
 
 export async function GET(
   request: NextRequest,
@@ -33,7 +33,7 @@ export async function GET(
 
     // Get RUSH balance
     const rush = await publicClient.readContract({
-      address: tokenCA,
+      address: tokenAddress,
       abi: tokenAbi,
       functionName: 'balanceOf',
       args: [user.walletAddress as Address],

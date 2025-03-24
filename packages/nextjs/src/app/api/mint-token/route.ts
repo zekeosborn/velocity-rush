@@ -6,7 +6,7 @@ import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { isAddress, parseUnits, type Address } from 'viem';
 
-const tokenCA = process.env.TOKEN_CA as Address;
+const tokenAddress = process.env.TOKEN_ADDRESS as Address;
 const mintAmount = parseUnits('1', 18);
 
 export async function POST(request: NextRequest) {
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     // Mint token
     const { request: mintRequest } = await publicClient.simulateContract({
-      address: tokenCA,
+      address: tokenAddress,
       abi: tokenAbi,
       functionName: 'mint',
       args: [recipient, mintAmount],
