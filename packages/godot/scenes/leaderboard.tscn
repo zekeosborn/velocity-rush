@@ -1,0 +1,158 @@
+[gd_scene load_steps=10 format=3 uid="uid://cjndmup7fd6n1"]
+
+[ext_resource type="Script" path="res://scripts/leaderboard.gd" id="1_bipvo"]
+[ext_resource type="Texture2D" uid="uid://dr5vxt50w1u2e" path="res://assets/images/sky/1.png" id="2_w0drb"]
+[ext_resource type="Texture2D" uid="uid://ci76n0kdhfk2o" path="res://assets/images/sky/2.png" id="3_ksn4d"]
+[ext_resource type="Texture2D" uid="uid://c8ctpbemwoq5k" path="res://assets/images/sky/3.png" id="4_m3xoj"]
+[ext_resource type="FontFile" uid="uid://10jv6r20m36a" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="5_1kpej"]
+[ext_resource type="Texture2D" uid="uid://vyjgvgqu8dyc" path="res://assets/images/sky/4.png" id="5_awm1r"]
+[ext_resource type="FontFile" uid="uid://ba6ff514jb8kr" path="res://assets/fonts/PixelOperator8.ttf" id="7_r6pul"]
+[ext_resource type="Texture2D" uid="uid://c6q5bs8ety3ks" path="res://assets/images/ui/arrow-left.png" id="8_8bb7k"]
+
+[sub_resource type="GDScript" id="GDScript_101vq"]
+script/source = "extends Label
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[node name="Leaderboard" type="Node"]
+script = ExtResource("1_bipvo")
+
+[node name="LeaderboardRequest" type="HTTPRequest" parent="."]
+
+[node name="Sky" type="Node" parent="."]
+
+[node name="Sky1" type="Sprite2D" parent="Sky"]
+scale = Vector2(2.223, 2.223)
+texture = ExtResource("2_w0drb")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Sky2" type="Sprite2D" parent="Sky"]
+scale = Vector2(2.223, 2.223)
+texture = ExtResource("3_ksn4d")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Sky3" type="Sprite2D" parent="Sky"]
+scale = Vector2(2.223, 2.223)
+texture = ExtResource("4_m3xoj")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Sky4" type="Sprite2D" parent="Sky"]
+scale = Vector2(2.223, 2.223)
+texture = ExtResource("5_awm1r")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="LoadingLabel" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.0
+offset_top = -16.0
+offset_right = 124.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("7_r6pul")
+theme_override_font_sizes/font_size = 32
+text = "LOADING..."
+script = SubResource("GDScript_101vq")
+metadata/_edit_lock_ = true
+
+[node name="BackButton" type="Button" parent="."]
+process_mode = 3
+offset_left = 110.0
+offset_top = 42.0
+offset_right = 153.0
+offset_bottom = 85.0
+theme_type_variation = &"FlatButton"
+theme_override_constants/icon_max_width = 35
+icon = ExtResource("8_8bb7k")
+metadata/_edit_lock_ = true
+
+[node name="Leaderboard" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -525.0
+offset_top = -254.5
+offset_right = 525.0
+offset_bottom = 295.5
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Leaderboard"]
+layout_mode = 2
+theme_override_constants/margin_top = 45
+theme_override_constants/margin_bottom = 45
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Leaderboard/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 38
+
+[node name="MarginContainer" type="MarginContainer" parent="Leaderboard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_right = 10
+
+[node name="Header" type="HBoxContainer" parent="Leaderboard/MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="RankLabel" type="Label" parent="Leaderboard/MarginContainer/VBoxContainer/MarginContainer/Header"]
+custom_minimum_size = Vector2(165, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_1kpej")
+theme_override_font_sizes/font_size = 22
+text = "RANK"
+horizontal_alignment = 1
+
+[node name="UsernameLabel" type="Label" parent="Leaderboard/MarginContainer/VBoxContainer/MarginContainer/Header"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_1kpej")
+theme_override_font_sizes/font_size = 22
+text = "USERNAME"
+
+[node name="WalletAddressLabel" type="Label" parent="Leaderboard/MarginContainer/VBoxContainer/MarginContainer/Header"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_1kpej")
+theme_override_font_sizes/font_size = 22
+text = "WALLET ADDR"
+
+[node name="LongestRunLabel" type="Label" parent="Leaderboard/MarginContainer/VBoxContainer/MarginContainer/Header"]
+custom_minimum_size = Vector2(235, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_1kpej")
+theme_override_font_sizes/font_size = 22
+text = "LONGEST RUN"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Leaderboard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LeaderboardContainer" type="VBoxContainer" parent="Leaderboard/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 38
+
+[connection signal="request_completed" from="LeaderboardRequest" to="." method="_on_leaderboard_request_completed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

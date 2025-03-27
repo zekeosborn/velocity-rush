@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://di1w22p6gb3r8"]
+
+[ext_resource type="Texture2D" uid="uid://b3m1j5vl0xvnr" path="res://assets/images/terrain/terrain.png" id="1_1xgi5"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_x1i4t"]
+
+[node name="Terrain" type="StaticBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_1xgi5")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(113, 12)
+shape = SubResource("WorldBoundaryShape2D_x1i4t")
+metadata/_edit_lock_ = true

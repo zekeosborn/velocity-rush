@@ -1,0 +1,80 @@
+[gd_scene load_steps=11 format=3 uid="uid://ghnismkuuguc"]
+
+[ext_resource type="Texture2D" uid="uid://cjhxoyit3rigt" path="res://assets/images/enemies/bat/fly.png" id="1_ppkbx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6vc0l"]
+atlas = ExtResource("1_ppkbx")
+region = Rect2(0, 0, 46, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6uui8"]
+atlas = ExtResource("1_ppkbx")
+region = Rect2(46, 0, 46, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k4jhu"]
+atlas = ExtResource("1_ppkbx")
+region = Rect2(92, 0, 46, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kghqi"]
+atlas = ExtResource("1_ppkbx")
+region = Rect2(138, 0, 46, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6pi5v"]
+atlas = ExtResource("1_ppkbx")
+region = Rect2(184, 0, 46, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lwkn4"]
+atlas = ExtResource("1_ppkbx")
+region = Rect2(230, 0, 46, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ucwn3"]
+atlas = ExtResource("1_ppkbx")
+region = Rect2(276, 0, 46, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sqgjh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6vc0l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6uui8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k4jhu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kghqi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6pi5v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lwkn4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ucwn3")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f300r"]
+size = Vector2(37, 31)
+
+[node name="LonelyBat" type="Area2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(5.96046e-08, -45)
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_sqgjh")
+animation = &"fly"
+autoplay = "fly"
+frame_progress = 0.880997
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(34.5, -24.5)
+shape = SubResource("RectangleShape2D_f300r")
+metadata/_edit_lock_ = true

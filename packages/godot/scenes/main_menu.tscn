@@ -1,0 +1,187 @@
+[gd_scene load_steps=9 format=3 uid="uid://cgf3dw2rfnhs0"]
+
+[ext_resource type="Texture2D" uid="uid://dr5vxt50w1u2e" path="res://assets/images/sky/1.png" id="1_43kbi"]
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_p4rx1"]
+[ext_resource type="Texture2D" uid="uid://ci76n0kdhfk2o" path="res://assets/images/sky/2.png" id="2_wxa3x"]
+[ext_resource type="Texture2D" uid="uid://c8ctpbemwoq5k" path="res://assets/images/sky/3.png" id="3_l4yi7"]
+[ext_resource type="Texture2D" uid="uid://vyjgvgqu8dyc" path="res://assets/images/sky/4.png" id="4_gsysh"]
+[ext_resource type="FontFile" uid="uid://ba6ff514jb8kr" path="res://assets/fonts/PixelOperator8.ttf" id="5_iva33"]
+[ext_resource type="Texture2D" uid="uid://bc7lqchyn1osr" path="res://assets/images/ui/x.png" id="8_oml8j"]
+[ext_resource type="Texture2D" uid="uid://cgsxtcuxkpqmu" path="res://assets/images/ui/fullscreen.png" id="9_l5rsx"]
+
+[node name="MainMenu" type="Node"]
+script = ExtResource("1_p4rx1")
+
+[node name="Sky" type="Node" parent="."]
+
+[node name="Sky1" type="Sprite2D" parent="Sky"]
+scale = Vector2(2.223, 2.223)
+texture = ExtResource("1_43kbi")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Sky2" type="Sprite2D" parent="Sky"]
+scale = Vector2(2.223, 2.223)
+texture = ExtResource("2_wxa3x")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Sky3" type="Sprite2D" parent="Sky"]
+scale = Vector2(2.223, 2.223)
+texture = ExtResource("3_l4yi7")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Sky4" type="Sprite2D" parent="Sky"]
+scale = Vector2(2.223, 2.223)
+texture = ExtResource("4_gsysh")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="ConnectWalletButton" type="Button" parent="."]
+process_mode = 3
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -198.0
+offset_top = -20.0
+offset_right = 198.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_iva33")
+theme_override_font_sizes/font_size = 32
+text = "CONNECT WALLET"
+metadata/_edit_lock_ = true
+
+[node name="MainButtons" type="VBoxContainer" parent="."]
+process_mode = 3
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -158.0
+offset_top = -80.0
+offset_right = 158.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_stretch_ratio = 0.0
+theme_override_constants/separation = 20
+alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="PlayButton" type="Button" parent="MainButtons"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_iva33")
+theme_override_font_sizes/font_size = 32
+disabled = true
+text = "PLAY"
+
+[node name="LeaderboardButton" type="Button" parent="MainButtons"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_iva33")
+theme_override_font_sizes/font_size = 32
+text = "LEADERBOARD"
+
+[node name="ShopButton" type="Button" parent="MainButtons"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_iva33")
+theme_override_font_sizes/font_size = 32
+disabled = true
+text = "SHOP"
+
+[node name="DisconnectButton" type="Button" parent="MainButtons"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_iva33")
+theme_override_font_sizes/font_size = 32
+text = "DISCONNECT"
+
+[node name="UserInfo" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 5.0
+offset_top = 1.0
+offset_right = 45.0
+offset_bottom = 41.0
+metadata/_edit_lock_ = true
+
+[node name="UserRequest" type="HTTPRequest" parent="UserInfo"]
+
+[node name="LongestRunLabel" type="Label" parent="UserInfo"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 24.0
+offset_right = 488.0
+offset_bottom = 56.0
+theme_override_fonts/font = ExtResource("5_iva33")
+theme_override_font_sizes/font_size = 32
+text = "LONGEST RUN: 0:00:00"
+metadata/_edit_lock_ = true
+
+[node name="RushLabel" type="Label" parent="UserInfo"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 72.0
+offset_right = 528.0
+offset_bottom = 104.0
+theme_override_fonts/font = ExtResource("5_iva33")
+theme_override_font_sizes/font_size = 32
+text = "RUSH: 0"
+metadata/_edit_lock_ = true
+
+[node name="UserInfoLoadingLabel" type="Label" parent="."]
+visible = false
+offset_left = 21.0
+offset_top = 25.0
+offset_right = 269.0
+offset_bottom = 57.0
+theme_override_fonts/font = ExtResource("5_iva33")
+theme_override_font_sizes/font_size = 32
+text = "LOADING..."
+metadata/_edit_lock_ = true
+
+[node name="XButton" type="Button" parent="."]
+process_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -74.0
+offset_top = -74.0
+offset_right = -21.0
+offset_bottom = -21.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_type_variation = &"FlatButton"
+theme_override_constants/icon_max_width = 45
+theme_override_fonts/font = ExtResource("5_iva33")
+theme_override_font_sizes/font_size = 32
+icon = ExtResource("8_oml8j")
+metadata/_edit_lock_ = true
+
+[node name="FullscreenButton" type="Button" parent="."]
+process_mode = 3
+offset_left = 1216.0
+offset_top = 21.0
+offset_right = 1259.0
+offset_bottom = 64.0
+theme_type_variation = &"FlatButton"
+theme_override_constants/icon_max_width = 35
+icon = ExtResource("9_l5rsx")
+metadata/_edit_lock_ = true
+
+[connection signal="pressed" from="ConnectWalletButton" to="." method="_on_connect_wallet_button_pressed"]
+[connection signal="pressed" from="MainButtons/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="MainButtons/LeaderboardButton" to="." method="_on_leaderboard_button_pressed"]
+[connection signal="pressed" from="MainButtons/DisconnectButton" to="." method="_on_disconnect_button_pressed"]
+[connection signal="request_completed" from="UserInfo/UserRequest" to="." method="_on_user_request_completed"]
+[connection signal="pressed" from="XButton" to="." method="_on_x_button_pressed"]
+[connection signal="pressed" from="FullscreenButton" to="." method="_on_fullscreen_button_pressed"]
