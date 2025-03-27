@@ -11,7 +11,7 @@ var longest_run: float = 0.0
 var time: float = 0.0
 
 const HMAC_SECRET_KEY: String = ""
-const IS_WEB3: bool = false
+const IS_WEB3: bool = true
 
 func _ready() -> void:
 	window = JavaScriptBridge.get_interface("window")
