@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { useDisconnect } from 'wagmi';
 import UsernameDialog from './_components/UsernameDialog';
 
-const baseApiUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function Home() {
   const godotRef = useRef<GodotIframe>(null);
@@ -35,7 +35,7 @@ export default function Home() {
     const godotWindow = godotRef.current?.contentWindow;
 
     if (godotWindow) {
-      godotWindow.baseApiUrl = baseApiUrl;
+      godotWindow.apiBaseUrl = apiBaseUrl;
       godotWindow.connectWallet = () => openConnectModal?.();
       godotWindow.disconnectWallet = disconnectWallet;
       godotWindow.toggleFullscreen = toggleFullscreen;
