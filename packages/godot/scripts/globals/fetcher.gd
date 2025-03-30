@@ -16,7 +16,7 @@ func set_values(_game_over_hud: VBoxContainer, _saving_label: Label):
 	saving_label = _saving_label
 
 func update_longest_run(new_longest_run: float):
-	var api_url = Global.base_api_url + "/longest-run/" + Global.window.userId
+	var api_url = Global.api_base_url + "/longest-run/" + Global.window.userId
 	
 	var json_data = { "longestRun": new_longest_run }
 	var json_string = JSON.stringify(json_data)
@@ -31,7 +31,7 @@ func update_longest_run(new_longest_run: float):
 	update_longest_run_request.request(api_url, headers, HTTPClient.METHOD_PATCH, json_string)
 	
 func mint_token(recipient: String):
-	var api_url = Global.base_api_url + "/mint-token"
+	var api_url = Global.api_base_url + "/mint-token"
 	
 	var mint_token_request = HTTPRequest.new()
 	mint_token_request.request_completed.connect(on_mint_token_request_completed)

@@ -9,7 +9,7 @@ const PIXEL_OPERATOR_8 = preload("res://assets/fonts/PixelOperator8.ttf")
 const PIXEL_OPERATOR_8_BOLD = preload("res://assets/fonts/PixelOperator8-Bold.ttf")
 
 func _ready() -> void:
-	var api_url = Global.base_api_url + "/leaderboard/" + Global.window.userId
+	var api_url = Global.api_base_url + "/leaderboard/" + Global.window.userId
 	leaderboard_request.request(api_url)
 	
 func _on_leaderboard_request_completed(

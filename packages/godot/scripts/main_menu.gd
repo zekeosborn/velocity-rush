@@ -51,7 +51,7 @@ func check_wallet_connection():
 		is_username_dialog_opened = false
 
 func initialize_user():
-	var api_url = Global.base_api_url + "/users/" + Global.window.userId
+	var api_url = Global.api_base_url + "/users/" + Global.window.userId
 	user_info_loading_label.show()
 	user_request.request(api_url)
 

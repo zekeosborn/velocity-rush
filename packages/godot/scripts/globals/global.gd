@@ -4,7 +4,7 @@ extends Node
 const WARMTH = preload("res://assets/audio/warmth.ogg")
 
 var window: JavaScriptObject
-var base_api_url: String
+var api_base_url: String
 var gravity: int = 5000
 var velocity: int = -1500
 var longest_run: float = 0.0
@@ -17,7 +17,7 @@ func _ready() -> void:
 	window = JavaScriptBridge.get_interface("window")
 	
 	if IS_WEB3:
-		base_api_url = window.baseApiUrl
+		api_base_url = window.apiBaseUrl
 		
 	initialize_main_bgm()
 
