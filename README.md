@@ -1,5 +1,5 @@
 # Velocity Rush
-![Velocity Rush](https://cdn.zekeosborn.xyz/velocity-rush-featured.png)  
+![Velocity Rush](https://cdn.osbrn.xyz/velocity-rush-featured.png)  
 An auto-runner game built to break Monad!
 
 ## Requirements
